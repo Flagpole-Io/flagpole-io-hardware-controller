@@ -8,22 +8,22 @@
 #include "string-util.h"
 
 char *substring(char *string, int position, int length) {
-    char *pointer;
-    int c;
+    char *substringPtr;
+    int charIndex;
 
-    pointer = malloc(length + 1);
+    substringPtr = malloc(length + 1);
 
-    if (pointer == NULL) {
-        printf("Unable to allocate memory.\n");
-        exit(1);
+    if (substringPtr == NULL) {
+        printf("[substringPtr] unable to allocate memory.\n");
+        exit(EXIT_FAILURE);
     }
 
-    for (c = 0; c < length; c++) {
-        *(pointer + c) = *(string + position - 1);
+    for (charIndex = 0; charIndex < length; charIndex++) {
+        *(substringPtr + charIndex) = *(string + position - 1);
         string++;
     }
 
-    *(pointer + c) = '\0';
+    *(substringPtr + charIndex) = '\0';
 
-    return pointer;
+    return substringPtr;
 }

@@ -28,7 +28,13 @@ int main() {
 
 void handleRaiseFlagRequest(redisContext *client) {
     printf("[controller]: raising flag.\n");
-    enableOutput(GPIO_RAISE_FLAG);
+
+    if(readInput(GPIO_UPPER_LIMIT) == 1) {
+        enableOutput(GPIO_RAISE_FLAG);
+        while (readInput(GPIO_UPPER_LIMIT) == 1);
+        disableOutput(GPIO_RAISE_FLAG);
+    }
+
     setHashField("status", "flag", "RAISED", client);
     printf("[controller]: raised flag.\n");
 }
@@ -41,6 +47,13 @@ void handleHalfFlagRequest(redisContext *client) {
 
 void handleLowerFlagRequest(redisContext *client) {
     printf("[controller]: lowering flag.\n");
+
+    if(readInput(GPIO_LOWER_LIMIT) == 1) {
+        enableOutput(GPIO_LOWER_FLAG);
+        while (readInput(GPIO_LOWER_LIMIT) == 1);
+        disableOutput(GPIO_LOWER_FLAG);
+    }
+
     setHashField("status", "flag", "LOWERED", client);
     printf("[controller]: lowered flag.\n");
 }
@@ -49,8 +62,10 @@ void handleLightsRequest(redisContext *client, Request *request) {
     printf("[controller]: setting lights to (%d).\n", request->value);
 
     if (request->value == 1) {
+        enableOutput(GPIO_ENABLE_LIGHTS);
         setHashField("status", "lights", "ON", client);
     } else {
+        disableOutput(GPIO_ENABLE_LIGHTS);
         setHashField("status", "lights", "OFF", client);
     }
 

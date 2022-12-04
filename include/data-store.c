@@ -7,6 +7,8 @@
 #include "data-store.h"
 
 redisContext *getDataStoreClient() {
+    printf("[redis]: getting redis environment.\n");
+
     char *redisHost = getenv("REDIS_HOST");
     int redisPort = atoi(getenv("REDIS_PORT"));
 
